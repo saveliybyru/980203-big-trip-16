@@ -37,4 +37,4 @@ const eventTemplate = () => (
   </div>
 </li>`
 );
- export {eventTemplate};
+export {eventTemplate};

@@ -1,9 +1,9 @@
-import { mainMenuTemplate } from "./view/menu-view.js";
-import { mainSortingTemplate } from "./view/sorting-view.js";
-import { filterTemplate } from "./view/filter-view.js";
-import { eventCreateTemplate } from "./view/event-create-view.js";
-import { eventEditTemplate } from "./view/event-edit-view.js";
-import { eventTemplate } from "./view/event-view.js";
+import { mainMenuTemplate } from './view/menu-view.js';
+import { mainSortingTemplate } from './view/sorting-view.js';
+import { filterTemplate } from './view/filter-view.js';
+import { eventCreateTemplate } from './view/event-create-view.js';
+import { eventEditTemplate } from './view/event-edit-view.js';
+import { eventTemplate } from './view/event-view.js';
 
 const RenderPosition = {
   BEFOREBEGIN: 'beforebegin',
@@ -15,8 +15,6 @@ const RenderPosition = {
 const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
-
-
 
 
 const controls = document.querySelector('.trip-controls');
