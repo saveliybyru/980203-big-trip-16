@@ -18,20 +18,20 @@ const createEventEditFormTemplate = (point) => {
 
   const checkType = (actualType, typeList) => {
     let list = '';
-    for (const type of typeList) {
-      if (type === actualType){
+    for (const currentType of typeList) {
+      if (currentType === actualType){
         list += `<div class="event__type-item">
-        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" checked>
-        <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
-      </div>`
+        <input id="event-type-${currentType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" checked>
+        <label class="event__type-label  event__type-label--${currentType}" for="event-type-${currentType}-1">${currentType}</label>
+      </div>`;
       }
       else {
         list +=`<div class="event__type-item">
-        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
-        <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
-      </div>`
-      };
-    };
+        <input id="event-type-${currentType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}">
+        <label class="event__type-label  event__type-label--${currentType}" for="event-type-${currentType}-1">${currentType}</label>
+      </div>`;
+      }
+    }
     return list;
   };
 

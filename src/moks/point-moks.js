@@ -66,17 +66,17 @@ const generateTypePoint = (points) => {
   return points[randomIndex];
 };
 
-const generateCity = (cities) => {
-  const randomIndex = getRandomInteger(0, cities.length - 1);
+const generateCity = (citiesList) => {
+  const randomIndex = getRandomInteger(0, citiesList.length - 1);
   return cities[randomIndex];
 };
 
-const generateDescription = (descriptions) => {
+const generateDescription = (descriptionsList) => {
   const descriptionCount = getRandomInteger(1, 5);
   let description = '';
   for (let i = 0; i < descriptionCount; i++) {
-    const randomIndex = getRandomInteger(0, descriptions.length - 1);
-    description = description + String(descriptions[randomIndex]);
+    const randomIndex = getRandomInteger(0, descriptionsList.length - 1);
+    description += String(descriptionsList[randomIndex]);
   }
   return description;
 };
