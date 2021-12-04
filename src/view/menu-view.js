@@ -7,7 +7,7 @@ const createMenuTemplate = () => (
 </nav>`
 );
 
-class menuView{
+class MenuView {
   #element = null;
 
   get element(){
@@ -26,4 +26,4 @@ class menuView{
   }
 }
 
-export default menuView;
+export default MenuView;

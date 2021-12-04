@@ -166,7 +166,7 @@ const createEventEditFormTemplate = (point = {}) => {
 </li>`;
 };
 
-class eventEditView {
+class EventEditFormView {
   #element = null;
   #point = null;
 
@@ -190,4 +190,4 @@ class eventEditView {
   }
 }
 
-export default eventEditView;
+export default EventEditFormView;

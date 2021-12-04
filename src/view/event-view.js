@@ -47,7 +47,7 @@ const createEventTemplate = (point) => {
 </li>`;
 };
 
-class eventView {
+class EventView {
   #element = null;
   #point = null;
 
@@ -72,4 +72,4 @@ class eventView {
   }
 }
 
-export default eventView;
+export default EventView;

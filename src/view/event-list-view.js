@@ -4,7 +4,7 @@ const createEventListTemplate = () => (
   '<ul class="trip-events__list"></ul>'
 );
 
-class eventListView{
+class EventListView {
   #element = null;
 
   get element(){
@@ -23,4 +23,4 @@ class eventListView{
   }
 }
 
-export default eventListView;
+export default EventListView;

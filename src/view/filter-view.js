@@ -21,7 +21,7 @@ const createFilterTemplate = () => (
 </form>`
 );
 
-class filterView{
+class FilterView {
   #element = null;
 
   get element(){
@@ -40,4 +40,4 @@ class filterView{
   }
 }
 
-export default filterView;
+export default FilterView;

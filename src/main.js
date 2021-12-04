@@ -1,9 +1,9 @@
-import menuView from './view/menu-view.js';
-import sortingView from './view/sorting-view.js';
-import filterView from './view/filter-view.js';
-import eventListView from './view/event-list-view.js';
-import eventEditView from './view/event-edit-form-view.js';
-import eventView from './view/event-view.js';
+import MenuView from './view/menu-view.js';
+import SortingView from './view/sorting-view.js';
+import FilterView from './view/filter-view.js';
+import EventListView from './view/event-list-view.js';
+import EventEditFormView from './view/event-edit-form-view.js';
+import EventView from './view/event-view.js';
 import { generatePoint } from './moks/point-moks.js';
 import { RenderPosition, render} from './render.js';
 
@@ -11,20 +11,20 @@ const controls = document.querySelector('.trip-controls');
 const menuControl = controls.querySelector('.trip-controls__navigation');
 const filterControl = controls.querySelector('.trip-controls__filters');
 
-render(menuControl, new menuView().element, RenderPosition.BEFOREEND);
-render(filterControl, new filterView().element, RenderPosition.BEFOREEND);
+render(menuControl, new MenuView().element, RenderPosition.BEFOREEND);
+render(filterControl, new FilterView().element, RenderPosition.BEFOREEND);
 
 const mainEventsList = document.querySelector('.trip-events');
 
-render(mainEventsList, new sortingView().element, RenderPosition.BEFOREEND);
+render(mainEventsList, new SortingView().element, RenderPosition.BEFOREEND);
 
-const eventList = new eventListView();
+const eventList = new EventListView();
 
 render(mainEventsList, eventList.element, RenderPosition.BEFOREEND);
 
 const renderPoints = (eventListElement, point) => {
-  const eventComponent = new eventView(point);
-  const eventEditComponent = new eventEditView(point);
+  const eventComponent = new EventView(point);
+  const eventEditComponent = new EventEditFormView(point);
 
   const replaceCardToForm = () => {
     eventListElement.replaceChild(eventEditComponent.element, eventComponent.element);
