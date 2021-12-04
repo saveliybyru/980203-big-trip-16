@@ -1,19 +1,25 @@
+import dayjs from "dayjs";
+import { createElement } from "../render";
+
 const createEventTemplate = (point) => {
   const {date, type, city, price,  timeStart, timeEnd, continueTime, isFavorite} = point;
+  const formatDate = dayjs(date).format('MMM D');
+  const formatTimeStart = dayjs(timeStart).format('HH:mm');
+  const formatTimeEnd = dayjs(timeEnd).format('HH:mm');
 
   const favoriteClassName = isFavorite ? 'event__favorite-btn  event__favorite-btn--active' : 'event__favorite-btn';
   return `<li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="2019-03-18">${date}</time>
+    <time class="event__date" datetime="${dayjs(date).format('YYYY-MM-DD')}">${formatDate}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
     </div>
     <h3 class="event__title">${type} ${city}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="2019-03-18T14:30">${timeStart}</time>
+        <time class="event__start-time" datetime="${dayjs(date).format('YYYY-MM-DD[T]')}${formatTimeStart}}">${formatTimeStart}</time>
         &mdash;
-        <time class="event__end-time" datetime="2019-03-18T16:05">${timeEnd}</time>
+        <time class="event__end-time" datetime="${dayjs(date).format('YYYY-MM-DD[T]')}${formatTimeEnd}">${formatTimeEnd}</time>
       </p>
       <p class="event__duration">${continueTime}</p>
     </div>
@@ -40,4 +46,30 @@ const createEventTemplate = (point) => {
   </div>
 </li>`;
 };
-export {createEventTemplate};
+
+class eventView {
+  #element = null;
+  #point = null;
+
+  constructor (point){
+    this.#point = point;
+  };
+
+  get element () {
+    if (!this.#element){
+      this.#element = createElement(this.template);
+    };
+
+    return this.#element;
+  };
+
+  get template(){
+    return createEventTemplate(this.#point);
+  };
+
+  removeElement () {
+    this.#element = null;
+  };
+};
+
+export default eventView;

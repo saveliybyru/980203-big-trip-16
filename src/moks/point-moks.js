@@ -94,16 +94,13 @@ const generateDateTime = () => {
 
   const DAYGAP = 5;
   const dateGap = getRandomInteger(-DAYGAP, DAYGAP);
-  const gapToday = dayjs().add(dateGap, 'd').toDate();
-  const date = dayjs(gapToday).format('MMM D');
+  const date = dayjs().add(dateGap, 'd');
 
   const MINUTEGAP = 38;
   const timeGap = getRandomInteger(-MINUTEGAP, MINUTEGAP);
-  const startTimeUnformat = dayjs(gapToday).add(timeGap, 'm').toDate();
-  const startTime = dayjs(startTimeUnformat).format('HH:mm');
-  const endTimeUnformat = dayjs(startTimeUnformat).add(timeGap, 'm').toDate();
-  const endTime = dayjs(endTimeUnformat).format('HH:mm');
-  const timePeriodUnformat = dayjs(startTimeUnformat).diff(dayjs(endTimeUnformat));
+  const startTime = dayjs(dayjs().add(dateGap, 'd').toDate()).add(timeGap, 'm').toDate();
+  const endTime = dayjs(startTime).add(timeGap, 'm').toDate();
+  const timePeriodUnformat = dayjs(startTime).diff(dayjs(endTime));
   const timePeriod = dayjs(timePeriodUnformat).format('HH[H] mm[M]');
 
   const time = [date, startTime, endTime, timePeriod];
