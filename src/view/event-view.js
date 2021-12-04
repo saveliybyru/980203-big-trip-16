@@ -1,5 +1,5 @@
-import dayjs from "dayjs";
-import { createElement } from "../render";
+import dayjs from 'dayjs';
+import { createElement } from '../render';
 
 const createEventTemplate = (point) => {
   const {date, type, city, price,  timeStart, timeEnd, continueTime, isFavorite} = point;
@@ -53,23 +53,23 @@ class eventView {
 
   constructor (point){
     this.#point = point;
-  };
+  }
 
   get element () {
     if (!this.#element){
       this.#element = createElement(this.template);
-    };
+    }
 
     return this.#element;
-  };
+  }
 
   get template(){
     return createEventTemplate(this.#point);
-  };
+  }
 
   removeElement () {
     this.#element = null;
-  };
-};
+  }
+}
 
 export default eventView;

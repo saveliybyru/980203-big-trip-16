@@ -1,7 +1,7 @@
-import { createElement } from "../render.js";
+import { createElement } from '../render.js';
 
 const createEventListTemplate = () => (
-  `<ul class="trip-events__list"></ul>`
+  '<ul class="trip-events__list"></ul>'
 );
 
 class eventListView{
@@ -16,11 +16,11 @@ class eventListView{
 
   get template(){
     return createEventListTemplate();
-  };
+  }
 
   removeElement(){
     this.#element = null;
-  };
-};
+  }
+}
 
 export default eventListView;

@@ -1,4 +1,4 @@
-import { createElement } from "../render.js";
+import { createElement } from '../render.js';
 
 const createMenuTemplate = () => (
   `<nav class="trip-controls__trip-tabs  trip-tabs">
@@ -19,11 +19,11 @@ class menuView{
 
   get template(){
     return createMenuTemplate();
-  };
+  }
 
   removeElement(){
     this.#element = null;
-  };
-};
+  }
+}
 
 export default menuView;

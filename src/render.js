@@ -5,8 +5,6 @@ const RenderPosition = {
   AFTEREND: 'afterend',
 };
 
-
-
 const render = (container, element, place) => {
   switch (place) {
     case RenderPosition.BEFOREBEGIN:

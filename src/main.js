@@ -1,7 +1,7 @@
 import menuView from './view/menu-view.js';
 import sortingView from './view/sorting-view.js';
 import filterView from './view/filter-view.js';
-import eventListView from './view/event-list-view.js'
+import eventListView from './view/event-list-view.js';
 import eventEditView from './view/event-edit-form-view.js';
 import eventView from './view/event-view.js';
 import { generatePoint } from './moks/point-moks.js';
@@ -40,9 +40,9 @@ const renderPoints = (eventListElement, point) => {
   eventEditComponent.element.querySelector('form').addEventListener('submit', (evt) => {
     evt.preventDefault();
     replaceFormToCard();
-  })
+  });
 
-render(eventListElement, eventComponent.element, RenderPosition.BEFOREEND);
+  render(eventListElement, eventComponent.element, RenderPosition.BEFOREEND);
 
 };
 
