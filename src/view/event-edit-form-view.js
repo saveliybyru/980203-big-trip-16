@@ -1,3 +1,6 @@
+import dayjs from 'dayjs';
+import { createElement } from '../render';
+
 const pointsType=[
   'taxi',
   'bus',
@@ -11,10 +14,25 @@ const pointsType=[
 ];
 
 
-const createEventEditFormTemplate = (point) => {
+const BLANK_POINT = {
+  date: dayjs(),
+  type: 'flight',
+  city: '',
+  price: 0,
+  description: '',
+  timeStart: dayjs(),
+  timeEnd: dayjs(),
+};
 
-  const {description, date, type, city, price,  timeStart, timeEnd} = point;
 
+const createEventEditFormTemplate = (point = {}) => {
+
+  const {date, type, city, price, description, timeStart, timeEnd} = point;
+
+
+  const formatDate = dayjs(date).format('DD/MM/YY');
+  const formatTimeStart = dayjs(timeStart).format('HH:mm');
+  const formatTimeEnd = dayjs(timeEnd).format('HH:mm');
 
   const checkType = (actualType, typeList) => {
     let list = '';
@@ -48,7 +66,7 @@ const createEventEditFormTemplate = (point) => {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${checkType(point.type, pointsType)}
+            ${checkType(type, pointsType)}
           </fieldset>
         </div>
       </div>
@@ -67,10 +85,10 @@ const createEventEditFormTemplate = (point) => {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${date} ${timeStart}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDate} ${formatTimeStart}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${date} ${timeEnd}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDate} ${formatTimeEnd}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -148,4 +166,28 @@ const createEventEditFormTemplate = (point) => {
 </li>`;
 };
 
-export {createEventEditFormTemplate};
+class EventEditFormView {
+  #element = null;
+  #point = null;
+
+  constructor (point = BLANK_POINT){
+    this.#point = point;
+  }
+
+  get element(){
+    if (!this.#element){
+      this.#element = createElement(this.template);
+    }
+    return this.#element;
+  }
+
+  get template(){
+    return createEventEditFormTemplate(this.#point);
+  }
+
+  removeElement () {
+    this.#element = null;
+  }
+}
+
+export default EventEditFormView;
