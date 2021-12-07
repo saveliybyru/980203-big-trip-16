@@ -67,10 +67,10 @@ const renderList = (listContainer, listEvents) => {
     const eventList = new EventListView();
     render(listContainer, eventList.element, RenderPosition.BEFOREEND);
 
-  for (let i = 0; i < listEvents.length; i++ ){
-    renderPoints(eventList.element, listEvents[i]);
+    for (let i = 0; i < listEvents.length; i++ ){
+      renderPoints(eventList.element, listEvents[i]);
+    }
   }
-}
 
 
 };
