@@ -196,7 +196,7 @@ class EventEditFormView extends AnyView{
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formCancelHandler);
   }
 
-  #formCancelHandler = (evt) => {
+  #formCancelHandler = () => {
     this._callback.formCancel();
   }
 
