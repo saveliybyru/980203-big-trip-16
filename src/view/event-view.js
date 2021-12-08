@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createElement } from '../render';
+import AnyView from './any-view';
 
 const createEventTemplate = (point) => {
   const {date, type, city, price,  timeStart, timeEnd, continueTime, isFavorite} = point;
@@ -47,29 +47,27 @@ const createEventTemplate = (point) => {
 </li>`;
 };
 
-class EventView {
-  #element = null;
+class EventView extends AnyView{
   #point = null;
 
   constructor (point){
+    super();
     this.#point = point;
-  }
-
-  get element () {
-    if (!this.#element){
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template(){
     return createEventTemplate(this.#point);
   }
 
-  removeElement () {
-    this.#element = null;
+  setEditClickHandler = (callback) => {
+    this._callback.editClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
+
+  #editClickHandler = () => {
+    this._callback.editClick();
+  }
+
 }
 
 export default EventView;
