@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AnyView from './any-view.js';
 
 const createMenuTemplate = () => (
   `<nav class="trip-controls__trip-tabs  trip-tabs">
@@ -7,22 +7,9 @@ const createMenuTemplate = () => (
 </nav>`
 );
 
-class MenuView {
-  #element = null;
-
-  get element(){
-    if (!this.#element){
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
+class MenuView extends AnyView{
   get template(){
     return createMenuTemplate();
-  }
-
-  removeElement(){
-    this.#element = null;
   }
 }
 

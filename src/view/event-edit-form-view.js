@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createElement } from '../render';
+import AnyView from './any-view';
 
 const pointsType=[
   'taxi',
@@ -166,28 +166,41 @@ const createEventEditFormTemplate = (point = {}) => {
 </li>`;
 };
 
-class EventEditFormView {
-  #element = null;
+class EventEditFormView extends AnyView{
   #point = null;
 
   constructor (point = BLANK_POINT){
+    super();
     this.#point = point;
   }
 
-  get element(){
-    if (!this.#element){
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
 
   get template(){
     return createEventEditFormTemplate(this.#point);
   }
 
-  removeElement () {
-    this.#element = null;
+
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
   }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+
+  setFormCancelHandler = (callback) => {
+    this._callback.formCancel = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formCancelHandler);
+  }
+
+  #formCancelHandler = () => {
+    this._callback.formCancel();
+  }
+
+
 }
 
 export default EventEditFormView;

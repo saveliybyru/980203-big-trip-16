@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AnyView from './any-view.js';
 
 const createSortingTemplate = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -29,22 +29,9 @@ const createSortingTemplate = () => (
 </form>`
 );
 
-class SortingView {
-  #element = null;
-
-  get element(){
-    if (!this.#element){
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
+class SortingView extends AnyView{
   get template(){
     return createSortingTemplate();
-  }
-
-  removeElement(){
-    this.#element = null;
   }
 }
 

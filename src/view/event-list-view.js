@@ -1,25 +1,12 @@
-import { createElement } from '../render.js';
+import AnyView from './any-view.js';
 
 const createEventListTemplate = () => (
   '<ul class="trip-events__list"></ul>'
 );
 
-class EventListView {
-  #element = null;
-
-  get element(){
-    if (!this.#element){
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
+class EventListView extends AnyView{
   get template(){
     return createEventListTemplate();
-  }
-
-  removeElement(){
-    this.#element = null;
   }
 }
 

@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AnyView from './any-view.js';
 
 const createFilterTemplate = () => (
   `<form class="trip-filters" action="#" method="get">
@@ -21,22 +21,9 @@ const createFilterTemplate = () => (
 </form>`
 );
 
-class FilterView {
-  #element = null;
-
-  get element(){
-    if (!this.#element){
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
+class FilterView extends AnyView{
   get template(){
     return createFilterTemplate();
-  }
-
-  removeElement(){
-    this.#element = null;
   }
 }
 

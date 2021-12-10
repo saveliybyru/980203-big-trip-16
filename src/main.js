@@ -6,14 +6,14 @@ import EventEditFormView from './view/event-edit-form-view.js';
 import EventView from './view/event-view.js';
 import EmptyEventsView from './view/empty-events-view.js';
 import { generatePoint } from './moks/point-moks.js';
-import { RenderPosition, render} from './render.js';
+import { RenderPosition, render, replace} from './render.js';
 
 const controls = document.querySelector('.trip-controls');
 const menuControl = controls.querySelector('.trip-controls__navigation');
 const filterControl = controls.querySelector('.trip-controls__filters');
 
-render(menuControl, new MenuView().element, RenderPosition.BEFOREEND);
-render(filterControl, new FilterView().element, RenderPosition.BEFOREEND);
+render(menuControl, new MenuView(), RenderPosition.BEFOREEND);
+render(filterControl, new FilterView(), RenderPosition.BEFOREEND);
 
 const mainEventsList = document.querySelector('.trip-events');
 
@@ -23,10 +23,10 @@ const renderPoints = (eventListElement, point) => {
   const eventEditComponent = new EventEditFormView(point);
 
   const replaceCardToForm = () => {
-    eventListElement.replaceChild(eventEditComponent.element, eventComponent.element);
+    replace(eventEditComponent, eventComponent);
   };
   const replaceFormToCard = () => {
-    eventListElement.replaceChild(eventComponent.element, eventEditComponent.element);
+    replace(eventComponent, eventEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -37,42 +37,39 @@ const renderPoints = (eventListElement, point) => {
     }
   };
 
-  eventComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  eventComponent.setEditClickHandler(() => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  eventEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  eventEditComponent.setFormCancelHandler(() => {
     replaceFormToCard();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  eventEditComponent.element.querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  eventEditComponent.setFormSubmitHandler(() => {
     replaceFormToCard();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  render(eventListElement, eventComponent.element, RenderPosition.BEFOREEND);
+  render(eventListElement, eventComponent, RenderPosition.BEFOREEND);
 
 };
 
 const renderList = (listContainer, listEvents) => {
 
   if (listEvents.length === 0 ){
-    render(listContainer, new EmptyEventsView().element, RenderPosition.BEFOREEND);
+    render(listContainer, new EmptyEventsView(), RenderPosition.BEFOREEND);
   }
   else {
-    render(listContainer, new SortingView().element, RenderPosition.BEFOREEND);
+    render(listContainer, new SortingView(), RenderPosition.BEFOREEND);
     const eventList = new EventListView();
-    render(listContainer, eventList.element, RenderPosition.BEFOREEND);
+    render(listContainer, eventList, RenderPosition.BEFOREEND);
 
     for (let i = 0; i < listEvents.length; i++ ){
       renderPoints(eventList.element, listEvents[i]);
     }
   }
-
-
 };
 
 const EVENT_COUNT = 10;
