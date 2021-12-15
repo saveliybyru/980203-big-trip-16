@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import AnyView from './any-view';
 
-const pointsType=[
+const eventsType=[
   'taxi',
   'bus',
   'train',
@@ -14,7 +14,7 @@ const pointsType=[
 ];
 
 
-const BLANK_POINT = {
+const BLANK_EVENT = {
   date: dayjs(),
   type: 'flight',
   city: '',
@@ -25,9 +25,9 @@ const BLANK_POINT = {
 };
 
 
-const createEventEditFormTemplate = (point = {}) => {
+const createEventEditFormTemplate = (event = {}) => {
 
-  const {date, type, city, price, description, timeStart, timeEnd} = point;
+  const {date, type, city, price, description, timeStart, timeEnd} = event;
 
 
   const formatDate = dayjs(date).format('DD/MM/YY');
@@ -66,7 +66,7 @@ const createEventEditFormTemplate = (point = {}) => {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${checkType(type, pointsType)}
+            ${checkType(type, eventsType)}
           </fieldset>
         </div>
       </div>
@@ -167,16 +167,16 @@ const createEventEditFormTemplate = (point = {}) => {
 };
 
 class EventEditFormView extends AnyView{
-  #point = null;
+  #event = null;
 
-  constructor (point = BLANK_POINT){
+  constructor (event = BLANK_EVENT){
     super();
-    this.#point = point;
+    this.#event = event;
   }
 
 
   get template(){
-    return createEventEditFormTemplate(this.#point);
+    return createEventEditFormTemplate(this.#event);
   }
 
 

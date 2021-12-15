@@ -2,7 +2,7 @@ import MenuView from './view/menu-view.js';
 import FilterView from './view/filter-view.js';
 import { generatePoint } from './moks/point-moks.js';
 import { RenderPosition, render} from './render.js';
-import BoardPresenter from './presenter/list-presenter.js';
+import BoardPresenter from './presenter/board-presenter.js';
 
 const controls = document.querySelector('.trip-controls');
 const menuControl = controls.querySelector('.trip-controls__navigation');
