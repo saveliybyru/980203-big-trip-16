@@ -27,7 +27,7 @@ class BoardPresenter{
   }
 
   #renderEvent = (event) => {
-    const eventPresenter = new EventPresenter(this.#listComponent, this.#handleEventChange);
+    const eventPresenter = new EventPresenter(this.#listComponent, this.#handleEventChange, this.#handleModeChange);
     eventPresenter.init(event);
     this.#eventPresenter.set(event.id, eventPresenter)
   }
@@ -47,6 +47,10 @@ class BoardPresenter{
 
   #renderEmptyList = () => {
     render(this.#listContainer, this.#emptyListComponent, RenderPosition.BEFOREEND);
+  }
+
+  #handleModeChange = () => {
+    this.#eventPresenter.forEach((presenter)=> presenter.resetView())
   }
 
   #handleEventChange = (updatedEvent) => {
