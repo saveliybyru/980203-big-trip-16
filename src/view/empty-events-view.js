@@ -8,7 +8,6 @@ class EmptyEventsView extends AnyView{
   get template(){
     return emptyEventsTemplate();
   }
-
 }
 
 export default EmptyEventsView;

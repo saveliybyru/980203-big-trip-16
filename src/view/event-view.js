@@ -6,7 +6,6 @@ const createEventTemplate = (event) => {
   const formatDate = dayjs(date).format('MMM D');
   const formatTimeStart = dayjs(timeStart).format('HH:mm');
   const formatTimeEnd = dayjs(timeEnd).format('HH:mm');
-
   const favoriteClassName = isFavorite ? 'event__favorite-btn  event__favorite-btn--active' : 'event__favorite-btn';
   return `<li class="trip-events__item">
   <div class="event">
@@ -21,7 +20,7 @@ const createEventTemplate = (event) => {
         &mdash;
         <time class="event__end-time" datetime="${dayjs(date).format('YYYY-MM-DD[T]')}${formatTimeEnd}">${formatTimeEnd}</time>
       </p>
-      <p class="event__duration">${continueTime}</p>
+      <p class="event__duration">${dayjs(continueTime).format('HH[H] mm[M]')}</p>
     </div>
     <p class="event__price">
       &euro;&nbsp;<span class="event__price-value">${price}</span>
@@ -77,7 +76,6 @@ class EventView extends AnyView{
     evt.preventDefault();
     this._callback.favoriteClick();
   }
-
 }
 
 export default EventView;

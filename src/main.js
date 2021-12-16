@@ -1,6 +1,6 @@
 import MenuView from './view/menu-view.js';
 import FilterView from './view/filter-view.js';
-import { generateEvent } from './moks/event-moks.js';
+import { generateEvent } from './mocks/event-mocks.js';
 import { RenderPosition, render} from './render.js';
 import BoardPresenter from './presenter/board-presenter.js';
 
@@ -12,9 +12,7 @@ render(menuControl, new MenuView(), RenderPosition.BEFOREEND);
 render(filterControl, new FilterView(), RenderPosition.BEFOREEND);
 
 const mainEventsList = document.querySelector('.trip-events');
-
 const EVENT_COUNT = 10;
 const events = Array.from({length: EVENT_COUNT}, generateEvent);
-
 const boardPresenter = new BoardPresenter(mainEventsList);
 boardPresenter.init(events);

@@ -12,10 +12,8 @@ class EventPresenter {
   #eventListContainer = null;
   #changeData = null;
   #changeMode = null;
-
   #eventComponent = null;
   #eventEditComponent = null;
-
   #event = null;
   #mode = Mode.DEFAULT;
 
@@ -27,35 +25,26 @@ class EventPresenter {
 
   init = (event) =>{
     this.#event = event;
-
     const prevEventComponent = this.#eventComponent;
     const prevEventEditComponent = this.#eventEditComponent;
 
     this.#eventComponent = new EventView(event);
     this.#eventEditComponent = new EventEditFormView(event);
-
-    this.#eventComponent.setEditClickHandler(() => {
-      this.#replaceCardToForm();
-    });
+    this.#eventComponent.setEditClickHandler(this.#handleEditClick);
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-    this.#eventEditComponent.setFormCancelHandler(() => {
-      this.#replaceFormToCard();
-    });
+    this.#eventEditComponent.setFormCancelHandler(this.#handleFormCancel);
     this.#eventEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
 
     if (prevEventComponent === null || prevEventEditComponent === null){
       render(this.#eventListContainer, this.#eventComponent, RenderPosition.BEFOREEND);
       return;
     }
-
     if (this.#mode === Mode.DEFAULT) {
       replace(this.#eventComponent, prevEventComponent);
     }
-
     if (this.#mode === Mode.EDITING) {
       replace(this.#eventEditComponent, prevEventEditComponent);
     }
-
 
     remove(prevEventComponent);
     remove(prevEventEditComponent);
@@ -97,8 +86,16 @@ class EventPresenter {
     this.#replaceFormToCard();
   }
 
+  #handleFormCancel = () => {
+    this.#replaceFormToCard();
+  }
+
   #handleFavoriteClick = () => {
     this.#changeData({...this.#event, isFavorite: !this.#event.isFavorite});
+  }
+
+  #handleEditClick = () =>{
+    this.#replaceCardToForm();
   }
 }
 

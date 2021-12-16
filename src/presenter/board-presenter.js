@@ -1,28 +1,26 @@
-import { render, RenderPosition, updateEvent} from '../render.js';
+import { render, RenderPosition, updateEvent, SortType} from '../render.js';
 import EmptyEventsView from '../view/empty-events-view.js';
 import EventListView from '../view/event-list-view.js';
-import SortingView from '../view/sorting-view.js';
+import SortingView, { sortDay, sortPrice, sortTime } from '../view/sorting-view.js';
 import EventPresenter from './event-presenter.js';
 
 
 class BoardPresenter{
   #listContainer = null;
-
-
   #listComponent = new EventListView();
   #sortComponent = new SortingView();
   #emptyListComponent = new EmptyEventsView();
-
   #events = [];
   #eventPresenter = new Map();
-
+  #currentSortType = SortType.DAY;
+  #sourcedEvents = [];
   constructor(listContainer) {
     this.#listContainer = listContainer;
   }
 
   init = (events) => {
     this.#events = [...events];
-
+    this.#sourcedEvents = [...events];
     this.#renderBoard();
   }
 
@@ -35,11 +33,9 @@ class BoardPresenter{
   #clearEvents = () =>{
     this.#eventPresenter.forEach((presenter) => presenter.destroy());
     this.#eventPresenter.clear();
-
   }
 
   #renderEvents = () => {
-
     for (let i = 0; i < this.#events.length; i++ ){
       this.#renderEvent(this.#events[i]);
     }
@@ -55,19 +51,44 @@ class BoardPresenter{
 
   #handleEventChange = (updatedEvent) => {
     this.#events = updateEvent(this.#events, updatedEvent);
+    this.#sourcedEvents = updateEvent(this.#sourcedEvents, updatedEvent);
     this.#eventPresenter.get(updatedEvent.id).init(updatedEvent);
+  }
+
+  #sortEvents = (sortType) => {
+    switch (sortType) {
+      case SortType.TIME:
+        this.#events.sort(sortTime);
+        break;
+      case SortType.PRICE:
+        this.#events.sort(sortPrice);
+        break;
+      default:
+        this.#events = [...this.#sourcedEvents].sort(sortDay);//Дата
+    }
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) =>{
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortEvents(sortType);
+    this.#clearEvents();
+    this.#renderEvents();
   }
 
   #renderSorting = () => {
     render(this.#listContainer, this.#sortComponent, RenderPosition.BEFOREEND);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   }
 
   #renderBoard = () => {
-
     if (this.#events.length === 0 ){
       this.#renderEmptyList();
     }
     else {
+      this.#sortEvents(this.#currentSortType);
       this.#renderSorting();
       render(this.#listContainer, this.#listComponent, RenderPosition.BEFOREEND);
       this.#renderEvents();

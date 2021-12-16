@@ -92,20 +92,15 @@ const generatePhotos = () => {
 };
 
 const generateDateTime = () => {
-
   const DAYGAP = 5;
   const dateGap = getRandomInteger(-DAYGAP, DAYGAP);
   const date = dayjs().add(dateGap, 'd');
-
   const MINUTEGAP = 38;
   const timeGap = getRandomInteger(-MINUTEGAP, MINUTEGAP);
   const startTime = dayjs(dayjs().add(dateGap, 'd').toDate()).add(timeGap, 'm').toDate();
   const endTime = dayjs(startTime).add(timeGap, 'm').toDate();
-  const timePeriodUnformat = dayjs(startTime).diff(dayjs(endTime));
-  const timePeriod = dayjs(timePeriodUnformat).format('HH[H] mm[M]');
-
+  const timePeriod = dayjs(startTime).diff(dayjs(endTime));
   const time = [date, startTime, endTime, timePeriod];
-
   return time;
 };
 
