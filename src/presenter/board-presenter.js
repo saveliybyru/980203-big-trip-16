@@ -29,7 +29,7 @@ class BoardPresenter{
   #renderEvent = (event) => {
     const eventPresenter = new EventPresenter(this.#listComponent, this.#handleEventChange, this.#handleModeChange);
     eventPresenter.init(event);
-    this.#eventPresenter.set(event.id, eventPresenter)
+    this.#eventPresenter.set(event.id, eventPresenter);
   }
 
   #clearEvents = () =>{
@@ -50,7 +50,7 @@ class BoardPresenter{
   }
 
   #handleModeChange = () => {
-    this.#eventPresenter.forEach((presenter)=> presenter.resetView())
+    this.#eventPresenter.forEach((presenter)=> presenter.resetView());
   }
 
   #handleEventChange = (updatedEvent) => {
@@ -65,13 +65,13 @@ class BoardPresenter{
   #renderBoard = () => {
 
     if (this.#events.length === 0 ){
-    this.#renderEmptyList();
+      this.#renderEmptyList();
     }
     else {
-    this.#renderSorting();
-    render(this.#listContainer, this.#listComponent, RenderPosition.BEFOREEND);
-    this.#renderEvents();
-      }
+      this.#renderSorting();
+      render(this.#listContainer, this.#listComponent, RenderPosition.BEFOREEND);
+      this.#renderEvents();
+    }
   }
 }
 

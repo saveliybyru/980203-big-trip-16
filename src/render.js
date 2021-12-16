@@ -56,7 +56,7 @@ const remove = (component) => {
     return;
   }
 
-  if (!(component instanceof AbstractView)) {
+  if (!(component instanceof AnyView)) {
     throw new Error('Can remove only components');
   }
 
