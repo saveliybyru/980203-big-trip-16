@@ -1,6 +1,6 @@
 import MenuView from './view/menu-view.js';
 import FilterView from './view/filter-view.js';
-import { generatePoint } from './moks/point-moks.js';
+import { generateEvent } from './moks/event-moks.js';
 import { RenderPosition, render} from './render.js';
 import BoardPresenter from './presenter/board-presenter.js';
 
@@ -14,7 +14,7 @@ render(filterControl, new FilterView(), RenderPosition.BEFOREEND);
 const mainEventsList = document.querySelector('.trip-events');
 
 const EVENT_COUNT = 10;
-const points = Array.from({length: EVENT_COUNT}, generatePoint);
+const events = Array.from({length: EVENT_COUNT}, generateEvent);
 
 const boardPresenter = new BoardPresenter(mainEventsList);
-boardPresenter.init(points);
+boardPresenter.init(events);

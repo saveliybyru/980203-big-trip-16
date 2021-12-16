@@ -187,7 +187,7 @@ class EventEditFormView extends AnyView{
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this.#event);
   }
 
 

@@ -1,4 +1,4 @@
-import { render, RenderPosition} from '../render.js';
+import { render, RenderPosition, updateEvent} from '../render.js';
 import EmptyEventsView from '../view/empty-events-view.js';
 import EventListView from '../view/event-list-view.js';
 import SortingView from '../view/sorting-view.js';
@@ -14,6 +14,7 @@ class BoardPresenter{
   #emptyListComponent = new EmptyEventsView();
 
   #events = [];
+  #eventPresenter = new Map();
 
   constructor(listContainer) {
     this.#listContainer = listContainer;
@@ -26,8 +27,15 @@ class BoardPresenter{
   }
 
   #renderEvent = (event) => {
-    const eventPresenter = new EventPresenter(this.#listComponent);
+    const eventPresenter = new EventPresenter(this.#listComponent, this.#handleEventChange);
     eventPresenter.init(event);
+    this.#eventPresenter.set(event.id, eventPresenter)
+  }
+
+  #clearEvents = () =>{
+    this.#eventPresenter.forEach((presenter) => presenter.destroy());
+    this.#eventPresenter.clear();
+
   }
 
   #renderEvents = () => {
@@ -39,6 +47,11 @@ class BoardPresenter{
 
   #renderEmptyList = () => {
     render(this.#listContainer, this.#emptyListComponent, RenderPosition.BEFOREEND);
+  }
+
+  #handleEventChange = (updatedEvent) => {
+    this.#events = updateEvent(this.#events, updatedEvent);
+    this.#eventPresenter.get(updatedEvent.id).init(updatedEvent);
   }
 
   #renderSorting = () => {

@@ -51,4 +51,31 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-export {RenderPosition, render, replace, createElement};
+const remove = (component) => {
+  if (component === null) {
+    return;
+  }
+
+  if (!(component instanceof AbstractView)) {
+    throw new Error('Can remove only components');
+  }
+
+  component.element.remove();
+  component.removeElement();
+};
+
+const updateEvent = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
+};
+
+export {RenderPosition, render, replace, createElement, remove, updateEvent};
