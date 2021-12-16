@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import AnyView from './any-view';
 
-const createEventTemplate = (point) => {
-  const {date, type, city, price,  timeStart, timeEnd, continueTime, isFavorite} = point;
+const createEventTemplate = (event) => {
+  const {date, type, city, price,  timeStart, timeEnd, continueTime, isFavorite} = event;
   const formatDate = dayjs(date).format('MMM D');
   const formatTimeStart = dayjs(timeStart).format('HH:mm');
   const formatTimeEnd = dayjs(timeEnd).format('HH:mm');
@@ -48,15 +48,15 @@ const createEventTemplate = (point) => {
 };
 
 class EventView extends AnyView{
-  #point = null;
+  #event = null;
 
-  constructor (point){
+  constructor (event){
     super();
-    this.#point = point;
+    this.#event = event;
   }
 
   get template(){
-    return createEventTemplate(this.#point);
+    return createEventTemplate(this.#event);
   }
 
   setEditClickHandler = (callback) => {
@@ -64,8 +64,18 @@ class EventView extends AnyView{
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
 
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
+  }
+
   #editClickHandler = () => {
     this._callback.editClick();
+  }
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favoriteClick();
   }
 
 }

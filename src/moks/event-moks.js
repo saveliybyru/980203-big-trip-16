@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 
-const pointsType=[
+const eventsType=[
   'taxi',
   'bus',
   'train',
@@ -61,9 +62,9 @@ const getRandomInteger = (a = 0, b = 1) => {
 };
 
 
-const generateTypePoint = (points) => {
-  const randomIndex = getRandomInteger(0, points.length - 1);
-  return points[randomIndex];
+const generateTypeEvent = (events) => {
+  const randomIndex = getRandomInteger(0, events.length - 1);
+  return events[randomIndex];
 };
 
 const generateCity = (citiesList) => {
@@ -108,11 +109,12 @@ const generateDateTime = () => {
   return time;
 };
 
-const generatePoint = () => {
-  const point = {
+const generateEvent = () => {
+  const event = {
+    id: nanoid(),
     date: generateDateTime()[0],
     continueTime: generateDateTime()[3],
-    type: generateTypePoint(pointsType),
+    type: generateTypeEvent(eventsType),
     city: generateCity(cities),
     price: getRandomInteger(100, 1000),
     options:'2',
@@ -122,7 +124,7 @@ const generatePoint = () => {
     timeEnd: generateDateTime()[2],
     isFavorite: Boolean(getRandomInteger(0, 1)),
   };
-  return point;
+  return event;
 };
 
-export{generatePoint};
+export{generateEvent};
