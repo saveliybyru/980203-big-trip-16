@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import {nanoid} from 'nanoid';
+import { offers } from './offers-mocks.js';
 
 const eventsType=[
   'taxi',
@@ -104,15 +105,25 @@ const generateDateTime = () => {
   return time;
 };
 
+
+const generateOffers = (offersList) => {
+  const offersObject = {};
+  offersList.forEach((typeOffers) => {
+    offersObject[typeOffers.type] = typeOffers.offers;
+  });
+return offersObject;
+};
+
 const generateEvent = () => {
+  const eventType = generateTypeEvent(eventsType);
   const event = {
     id: nanoid(),
     date: generateDateTime()[0],
     continueTime: generateDateTime()[3],
-    type: generateTypeEvent(eventsType),
+    type: eventType,
     city: generateCity(cities),
     price: getRandomInteger(100, 1000),
-    options:'2',
+    offers: generateOffers(offers),
     description: generateDescription(descriptions),
     photo: generatePhotos(),
     timeStart: generateDateTime()[1],
