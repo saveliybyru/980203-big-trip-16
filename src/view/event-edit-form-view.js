@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import AnyView from './any-view';
+import SmartView from './smart-view.js';
 
 const eventsType=[
   'taxi',
@@ -27,7 +27,7 @@ const BLANK_EVENT = {
 const checkType = (actualType, typeList) => {
   let list = '';
   for (const currentType of typeList) {
-      list += `<div class="event__type-item">
+    list += `<div class="event__type-item">
       <input id="event-type-${currentType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${currentType === actualType ? 'checked' : ''}>
       <label class="event__type-label  event__type-label--${currentType}" for="event-type-${currentType}-1">${currentType}</label>
     </div>`;
@@ -36,26 +36,26 @@ const checkType = (actualType, typeList) => {
 };
 
 const actualOffers = (offers) => {
-    let list = '';
-    for(const offer of offers){
-      list += `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer">
+  let list = '';
+  for(const offer of offers){
+    list += `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer" >
       <label class="event__offer-label" for="${offer.id}">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
       </label>
-      </div>`
-    }
-    let listOffers = `<section class="event__section  event__section--offers">
+      </div>`;
+  }
+  const listOffers = `<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
     ${list}
     </div>
-    </section>`
+    </section>`;
 
-    return listOffers;
-}
+  return listOffers;
+};
 
 const createEventEditFormTemplate = (data) => {
   const {date, type, city, price, offers, description, timeStart, timeEnd} = data;
@@ -111,7 +111,7 @@ const createEventEditFormTemplate = (data) => {
       </button>
     </header>
     <section class="event__details">
-      ${offers[type].length != 0 ? actualOffers(offers[type]) : ''}
+      ${offers[type].length !== 0 ? actualOffers(offers[type]) : ''}
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
@@ -121,12 +121,11 @@ const createEventEditFormTemplate = (data) => {
 </li>`;
 };
 
-class EventEditFormView extends AnyView{
+class EventEditFormView extends SmartView{
   constructor (event = BLANK_EVENT){
     super();
     this._data = EventEditFormView.parseEventToData(event);
 
-    //Добавить обработчики
     this.#setInnerHandlers();
   }
 
@@ -134,24 +133,6 @@ class EventEditFormView extends AnyView{
     return createEventEditFormTemplate(this._data);
   }
 
-  // Обновить данные
-  updateData = (update) => {
-    if (!update) {
-      return;
-    }
-    this._data = {...this._data, ...update};
-    this.updateElement();
-  }
-
-  // Обновить элемент
-  updateElement = () => {
-    const prevElement = this.element;
-    const parent = prevElement.parentElement;
-    this.removeElement();
-    const newElement = this.element;
-    parent.replaceChild(newElement, prevElement);
-    this.restoreHandlers();
-  }
 
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
@@ -163,28 +144,36 @@ class EventEditFormView extends AnyView{
     this._callback.formSubmit(EventEditFormView.parseDataToEvent(this._data));
   }
 
-  //подменить данные на состояние
   static parseEventToData = (event) => ({...event});
 
-  //Подменить состояние на данные
   static parseDataToEvent = (data) => {
     const event = {...data};
 
     return event;
   }
 
-  // Восстановить обработчики
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setFormSubmitHandler(this._callback.formCancel);
   }
 
-  // Что-то нужно сделать...
-  #eventToggleHandler = () => {}
+  #eventToggleHandler = (evt) => {
+    if (evt.target.type === 'radio') {
+      this.updateData({ type: evt.target.value });
+    }
+  }
 
-  //Добавить обработчики
+  #destinationInputHandler = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      city: evt.target.value,
+    }, true);
+  }
+
   #setInnerHandlers = () => {
-    this.element.querySelector('.event__type-input').addEventListener('click', this.#eventToggleHandler);
+    this.element.querySelector('.event__type-group').addEventListener('click', this.#eventToggleHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationInputHandler);
   }
 
   setFormCancelHandler = (callback) => {

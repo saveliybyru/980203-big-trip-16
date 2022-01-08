@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
-import {nanoid} from 'nanoid';
+import { nanoid } from 'nanoid';
 import { offers } from './offers-mocks.js';
 
-const eventsType=[
+const eventsType = [
   'taxi',
   'bus',
   'train',
@@ -62,7 +62,6 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-
 const generateTypeEvent = (events) => {
   const randomIndex = getRandomInteger(0, events.length - 1);
   return events[randomIndex];
@@ -98,20 +97,21 @@ const generateDateTime = () => {
   const date = dayjs().add(dateGap, 'd');
   const MINUTEGAP = 38;
   const timeGap = getRandomInteger(-MINUTEGAP, MINUTEGAP);
-  const startTime = dayjs(dayjs().add(dateGap, 'd').toDate()).add(timeGap, 'm').toDate();
+  const startTime = dayjs(dayjs().add(dateGap, 'd').toDate())
+    .add(timeGap, 'm')
+    .toDate();
   const endTime = dayjs(startTime).add(timeGap, 'm').toDate();
   const timePeriod = dayjs(startTime).diff(dayjs(endTime));
   const time = [date, startTime, endTime, timePeriod];
   return time;
 };
 
-
 const generateOffers = (offersList) => {
   const offersObject = {};
   offersList.forEach((typeOffers) => {
     offersObject[typeOffers.type] = typeOffers.offers;
   });
-return offersObject;
+  return offersObject;
 };
 
 const generateEvent = () => {
@@ -133,4 +133,4 @@ const generateEvent = () => {
   return event;
 };
 
-export{generateEvent};
+export { generateEvent };
