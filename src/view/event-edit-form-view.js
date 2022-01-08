@@ -24,7 +24,6 @@ const BLANK_EVENT = {
   timeEnd: dayjs(),
 };
 
-
 const checkType = (actualType, typeList) => {
   let list = '';
   for (const currentType of typeList) {
@@ -35,7 +34,6 @@ const checkType = (actualType, typeList) => {
   }
   return list;
 };
-
 
 const actualOffers = (offers) => {
     let list = '';
@@ -59,8 +57,8 @@ const actualOffers = (offers) => {
     return listOffers;
 }
 
-const createEventEditFormTemplate = (event = {}) => {
-  const {date, type, city, price, offers, description, timeStart, timeEnd} = event;
+const createEventEditFormTemplate = (data) => {
+  const {date, type, city, price, offers, description, timeStart, timeEnd} = data;
   const formatDate = dayjs(date).format('DD/MM/YY');
   const formatTimeStart = dayjs(timeStart).format('HH:mm');
   const formatTimeEnd = dayjs(timeEnd).format('HH:mm');
@@ -124,15 +122,35 @@ const createEventEditFormTemplate = (event = {}) => {
 };
 
 class EventEditFormView extends AnyView{
-  #event = null;
-
   constructor (event = BLANK_EVENT){
     super();
-    this.#event = event;
+    this._data = EventEditFormView.parseEventToData(event);
+
+    //Добавить обработчики
+    this.#setInnerHandlers();
   }
 
   get template(){
-    return createEventEditFormTemplate(this.#event);
+    return createEventEditFormTemplate(this._data);
+  }
+
+  // Обновить данные
+  updateData = (update) => {
+    if (!update) {
+      return;
+    }
+    this._data = {...this._data, ...update};
+    this.updateElement();
+  }
+
+  // Обновить элемент
+  updateElement = () => {
+    const prevElement = this.element;
+    const parent = prevElement.parentElement;
+    this.removeElement();
+    const newElement = this.element;
+    parent.replaceChild(newElement, prevElement);
+    this.restoreHandlers();
   }
 
   setFormSubmitHandler = (callback) => {
@@ -142,7 +160,31 @@ class EventEditFormView extends AnyView{
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(this.#event);
+    this._callback.formSubmit(EventEditFormView.parseDataToEvent(this._data));
+  }
+
+  //подменить данные на состояние
+  static parseEventToData = (event) => ({...event});
+
+  //Подменить состояние на данные
+  static parseDataToEvent = (data) => {
+    const event = {...data};
+
+    return event;
+  }
+
+  // Восстановить обработчики
+  restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+  }
+
+  // Что-то нужно сделать...
+  #eventToggleHandler = () => {}
+
+  //Добавить обработчики
+  #setInnerHandlers = () => {
+    this.element.querySelector('.event__type-input').addEventListener('click', this.#eventToggleHandler);
   }
 
   setFormCancelHandler = (callback) => {
