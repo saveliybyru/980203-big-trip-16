@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 import { offers } from './offers-mocks.js';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 
 const eventsType = [
   'taxi',
@@ -93,16 +95,15 @@ const generatePhotos = () => {
 
 const generateDateTime = () => {
   const DAYGAP = 5;
-  const dateGap = getRandomInteger(-DAYGAP, DAYGAP);
-  const date = dayjs().add(dateGap, 'd');
-  const MINUTEGAP = 38;
-  const timeGap = getRandomInteger(-MINUTEGAP, MINUTEGAP);
+  const dateGap = getRandomInteger(DAYGAP, DAYGAP*2);
+  const HOURGAP = 5;
+  const timeGap = getRandomInteger(HOURGAP, HOURGAP*2);
   const startTime = dayjs(dayjs().add(dateGap, 'd').toDate())
-    .add(timeGap, 'm')
+    .add(timeGap, 'h')
     .toDate();
-  const endTime = dayjs(startTime).add(timeGap, 'm').toDate();
-  const timePeriod = dayjs(startTime).diff(dayjs(endTime));
-  const time = [date, startTime, endTime, timePeriod];
+  const endTime = dayjs(startTime).add(timeGap, 'h').toDate();
+  const durationTime = dayjs.duration(dayjs(endTime).diff(dayjs(startTime))).format('D[D] HH[H] mm[M]');
+  const time = [startTime, endTime, durationTime];
   return time;
 };
 
@@ -118,16 +119,15 @@ const generateEvent = () => {
   const eventType = generateTypeEvent(eventsType);
   const event = {
     id: nanoid(),
-    date: generateDateTime()[0],
-    continueTime: generateDateTime()[3],
     type: eventType,
     city: generateCity(cities),
     price: getRandomInteger(100, 1000),
     offers: generateOffers(offers),
     description: generateDescription(descriptions),
     photo: generatePhotos(),
-    timeStart: generateDateTime()[1],
-    timeEnd: generateDateTime()[2],
+    timeStart: generateDateTime()[0],
+    timeEnd: generateDateTime()[1],
+    durationTime: generateDateTime()[2],
     isFavorite: Boolean(getRandomInteger(0, 1)),
   };
   return event;
