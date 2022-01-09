@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import AnyView from './any-view';
+import SmartView from './smart-view.js';
 
 const eventsType=[
   'taxi',
@@ -24,30 +24,44 @@ const BLANK_EVENT = {
   timeEnd: dayjs(),
 };
 
+const checkType = (actualType, typeList) => {
+  let list = '';
+  for (const currentType of typeList) {
+    list += `<div class="event__type-item">
+      <input id="event-type-${currentType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${currentType === actualType ? 'checked' : ''}>
+      <label class="event__type-label  event__type-label--${currentType}" for="event-type-${currentType}-1">${currentType}</label>
+    </div>`;
+  }
+  return list;
+};
 
-const createEventEditFormTemplate = (event = {}) => {
-  const {date, type, city, price, description, timeStart, timeEnd} = event;
+const actualOffers = (offers) => {
+  let list = '';
+  for(const offer of offers){
+    list += `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer" >
+      <label class="event__offer-label" for="${offer.id}">
+        <span class="event__offer-title">${offer.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
+      </label>
+      </div>`;
+  }
+  const listOffers = `<section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+    <div class="event__available-offers">
+    ${list}
+    </div>
+    </section>`;
+
+  return listOffers;
+};
+
+const createEventEditFormTemplate = (data) => {
+  const {date, type, city, price, offers, description, timeStart, timeEnd} = data;
   const formatDate = dayjs(date).format('DD/MM/YY');
   const formatTimeStart = dayjs(timeStart).format('HH:mm');
   const formatTimeEnd = dayjs(timeEnd).format('HH:mm');
-  const checkType = (actualType, typeList) => {
-    let list = '';
-    for (const currentType of typeList) {
-      if (currentType === actualType){
-        list += `<div class="event__type-item">
-        <input id="event-type-${currentType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" checked>
-        <label class="event__type-label  event__type-label--${currentType}" for="event-type-${currentType}-1">${currentType}</label>
-      </div>`;
-      }
-      else {
-        list +=`<div class="event__type-item">
-        <input id="event-type-${currentType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}">
-        <label class="event__type-label  event__type-label--${currentType}" for="event-type-${currentType}-1">${currentType}</label>
-      </div>`;
-      }
-    }
-    return list;
-  };
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -97,51 +111,7 @@ const createEventEditFormTemplate = (event = {}) => {
       </button>
     </header>
     <section class="event__details">
-      <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-        <div class="event__available-offers">
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-            <label class="event__offer-label" for="event-offer-luggage-1">
-              <span class="event__offer-title">Add luggage</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">50</span>
-            </label>
-          </div>
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
-            <label class="event__offer-label" for="event-offer-comfort-1">
-              <span class="event__offer-title">Switch to comfort</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">80</span>
-            </label>
-          </div>
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-            <label class="event__offer-label" for="event-offer-meal-1">
-              <span class="event__offer-title">Add meal</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">15</span>
-            </label>
-          </div>
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-            <label class="event__offer-label" for="event-offer-seats-1">
-              <span class="event__offer-title">Choose seats</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">5</span>
-            </label>
-          </div>
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-            <label class="event__offer-label" for="event-offer-train-1">
-              <span class="event__offer-title">Travel by train</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">40</span>
-            </label>
-          </div>
-        </div>
-      </section>
+      ${offers[type].length !== 0 ? actualOffers(offers[type]) : ''}
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
@@ -151,17 +121,18 @@ const createEventEditFormTemplate = (event = {}) => {
 </li>`;
 };
 
-class EventEditFormView extends AnyView{
-  #event = null;
-
+class EventEditFormView extends SmartView{
   constructor (event = BLANK_EVENT){
     super();
-    this.#event = event;
+    this._data = EventEditFormView.parseEventToData(event);
+
+    this.#setInnerHandlers();
   }
 
   get template(){
-    return createEventEditFormTemplate(this.#event);
+    return createEventEditFormTemplate(this._data);
   }
+
 
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
@@ -170,7 +141,39 @@ class EventEditFormView extends AnyView{
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(this.#event);
+    this._callback.formSubmit(EventEditFormView.parseDataToEvent(this._data));
+  }
+
+  static parseEventToData = (event) => ({...event});
+
+  static parseDataToEvent = (data) => {
+    const event = {...data};
+
+    return event;
+  }
+
+  restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setFormSubmitHandler(this._callback.formCancel);
+  }
+
+  #eventToggleHandler = (evt) => {
+    if (evt.target.type === 'radio') {
+      this.updateData({ type: evt.target.value });
+    }
+  }
+
+  #destinationInputHandler = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      city: evt.target.value,
+    }, true);
+  }
+
+  #setInnerHandlers = () => {
+    this.element.querySelector('.event__type-group').addEventListener('click', this.#eventToggleHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationInputHandler);
   }
 
   setFormCancelHandler = (callback) => {
@@ -182,5 +185,6 @@ class EventEditFormView extends AnyView{
     this._callback.formCancel();
   }
 }
+
 
 export default EventEditFormView;

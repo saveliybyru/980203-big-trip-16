@@ -1,8 +1,21 @@
 import dayjs from 'dayjs';
-import AnyView from './any-view';
+import AnyView from './any-view.js';
+
+
+const actualOffers = (offers) => {
+  let list = '';
+  for(const offer of offers){
+    list += `<li class="event__offer">
+    <span class="event__offer-title">${offer.title}</span>
+    &plus;&euro;&nbsp;
+    <span class="event__offer-price">${offer.price}</span>
+  </li>`;
+  }
+  return list;
+};
 
 const createEventTemplate = (event) => {
-  const {date, type, city, price,  timeStart, timeEnd, continueTime, isFavorite} = event;
+  const {date, type, city, price, offers, timeStart, timeEnd, continueTime, isFavorite} = event;
   const formatDate = dayjs(date).format('MMM D');
   const formatTimeStart = dayjs(timeStart).format('HH:mm');
   const formatTimeEnd = dayjs(timeEnd).format('HH:mm');
@@ -27,11 +40,7 @@ const createEventTemplate = (event) => {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      <li class="event__offer">
-        <span class="event__offer-title">Rent a car</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">200</span>
-      </li>
+      ${actualOffers(offers[type])}
     </ul>
     <button class="${favoriteClassName}" type="button">
       <span class="visually-hidden">Add to favorite</span>
