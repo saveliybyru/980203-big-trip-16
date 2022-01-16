@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import AnyView from './any-view.js';
 
 
-const actualOffers = (offers) => {
+const createActualOffers = (offers) => {
   let list = '';
   for(const offer of offers){
     list += `<li class="event__offer">
@@ -14,33 +14,35 @@ const actualOffers = (offers) => {
   return list;
 };
 
+
 const createEventTemplate = (event) => {
-  const {date, type, city, price, offers, timeStart, timeEnd, continueTime, isFavorite} = event;
-  const formatDate = dayjs(date).format('MMM D');
+  const {type, city, price, offers, timeStart, timeEnd, durationTime, isFavorite} = event;
+  const formatDate = dayjs(timeStart).format('MMM D');
   const formatTimeStart = dayjs(timeStart).format('HH:mm');
   const formatTimeEnd = dayjs(timeEnd).format('HH:mm');
+
   const favoriteClassName = isFavorite ? 'event__favorite-btn  event__favorite-btn--active' : 'event__favorite-btn';
   return `<li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="${dayjs(date).format('YYYY-MM-DD')}">${formatDate}</time>
+    <time class="event__date" datetime="${dayjs(timeStart).format('YYYY-MM-DD')}">${formatDate}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
     </div>
     <h3 class="event__title">${type} ${city}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="${dayjs(date).format('YYYY-MM-DD[T]')}${formatTimeStart}}">${formatTimeStart}</time>
+        <time class="event__start-time" datetime="${dayjs(timeStart).format('YYYY-MM-DD[T] HH:mm')}">${formatTimeStart}</time>
         &mdash;
-        <time class="event__end-time" datetime="${dayjs(date).format('YYYY-MM-DD[T]')}${formatTimeEnd}">${formatTimeEnd}</time>
+        <time class="event__end-time" datetime="${dayjs(timeEnd).format('YYYY-MM-DD[T] HH:mm')}">${formatTimeEnd}</time>
       </p>
-      <p class="event__duration">${dayjs(continueTime).format('HH[H] mm[M]')}</p>
+      <p class="event__duration">${durationTime}</p>
     </div>
     <p class="event__price">
       &euro;&nbsp;<span class="event__price-value">${price}</span>
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      ${actualOffers(offers[type])}
+      ${createActualOffers(offers[type])}
     </ul>
     <button class="${favoriteClassName}" type="button">
       <span class="visually-hidden">Add to favorite</span>

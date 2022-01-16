@@ -28,9 +28,9 @@ const createSortingTemplate = () => (
 </form>`
 );
 
-const sortDay = (firstEvent, secondEvent) => dayjs(firstEvent.date).diff(dayjs(secondEvent.date));
+const sortDay = (firstEvent, secondEvent) => dayjs(firstEvent.timeStart).diff(dayjs(secondEvent.timeStart));
 const sortPrice = (firstEvent, secondEvent) => secondEvent.price - firstEvent.price;
-const sortTime = (firstEvent, secondEvent) => secondEvent.continueTime - firstEvent.continueTime;
+const sortTime = (firstEvent, secondEvent) =>dayjs(secondEvent.timeStart).diff(dayjs(secondEvent.timeEnd))-dayjs(firstEvent.timeStart).diff(dayjs(firstEvent.timeEnd));
 
 class SortingView extends AnyView{
   get template(){
