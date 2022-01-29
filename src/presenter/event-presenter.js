@@ -1,6 +1,6 @@
 import EventEditFormView from '../view/event-edit-form-view.js';
 import EventView from '../view/event-view.js';
-import { render, RenderPosition, replace, remove} from '../render.js';
+import { render, RenderPosition, replace, remove, UpdateType, UserAction} from '../render.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -84,7 +84,10 @@ class EventPresenter {
   }
 
   #handleFormSubmit = (event) => {
-    this.#changeData(event);
+    this.#changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      event);
     this.#replaceFormToCard();
   }
 
@@ -94,11 +97,22 @@ class EventPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#event, isFavorite: !this.#event.isFavorite});
+    this.#changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.PATCH,
+      {...this.#event, isFavorite: !this.#event.isFavorite});
   }
 
   #handleEditClick = () =>{
     this.#replaceCardToForm();
+  }
+
+  #handleDeleteClick = (event) => {
+    this.#changeData(
+      UserAction.DELETE_EVENT,
+      UpdateType.MINOR,
+      event,
+    );
   }
 }
 

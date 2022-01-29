@@ -3,6 +3,7 @@ import FilterView from './view/filter-view.js';
 import { generateEvent } from './mocks/event-mocks.js';
 import { RenderPosition, render} from './render.js';
 import BoardPresenter from './presenter/board-presenter.js';
+import EventsModel from './model/events-model.js';
 
 const controls = document.querySelector('.trip-controls');
 const menuControl = controls.querySelector('.trip-controls__navigation');
@@ -14,5 +15,9 @@ render(filterControl, new FilterView(), RenderPosition.BEFOREEND);
 const mainEventsList = document.querySelector('.trip-events');
 const EVENT_COUNT = 10;
 const events = Array.from({length: EVENT_COUNT}, generateEvent);
-const boardPresenter = new BoardPresenter(mainEventsList);
-boardPresenter.init(events);
+
+const eventsModel = new EventsModel();
+eventsModel.events = events;
+
+const boardPresenter = new BoardPresenter(mainEventsList, eventsModel);
+boardPresenter.init();

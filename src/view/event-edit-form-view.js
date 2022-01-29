@@ -201,6 +201,7 @@ class EventEditFormView extends SmartView {
     this.#setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setFormCancelHandler(this._callback.formCancel);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   };
 
   #dateStartChangeHandler = ([date]) => {
@@ -214,6 +215,11 @@ class EventEditFormView extends SmartView {
       timeEnd: date,
     });
   };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.deleteClick(EventEditFormView.parseDataToEvent(this._data));
+  }
 
   #eventToggleHandler = (evt) => {
     if (evt.target.type === 'radio') {
@@ -238,6 +244,7 @@ class EventEditFormView extends SmartView {
     this.element
       .querySelector('.event__input--destination')
       .addEventListener('input', this.#destinationInputHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
   };
 
   setFormCancelHandler = (callback) => {
@@ -246,6 +253,11 @@ class EventEditFormView extends SmartView {
       .querySelector('.event__rollup-btn')
       .addEventListener('click', this.#formCancelHandler);
   };
+
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+  }
 
   #formCancelHandler = () => {
     this._callback.formCancel();

@@ -13,6 +13,18 @@ const RenderPosition = {
   AFTEREND: 'afterend',
 };
 
+const UserAction = {
+  UPDATE_EVENT:'UPDATE_EVENT',
+  ADD_EVENT:'ADD_EVENT',
+  DELETE_EVENT:'DELETE_EVENT',
+};
+
+const UpdateType = {
+  PATCH:'PATCH',
+  MINOR:'MINOR',
+  MAJOR:'MAJOR',
+};
+
 const render = (container, element, place) => {
   const parent = container instanceof AnyView ? container.element : container;
   const child = element instanceof AnyView ? element.element : element;
@@ -64,17 +76,5 @@ const remove = (component) => {
   component.removeElement();
 };
 
-const updateEvent = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
 
-  if (index === -1) {
-    return items;
-  }
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
-export {RenderPosition, render, replace, createElement, remove, updateEvent, SortType};
+export {RenderPosition, render, replace, createElement, remove, SortType, UserAction, UpdateType};
